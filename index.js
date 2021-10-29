@@ -78,7 +78,7 @@ app.get("/games/:id",(req, res)=>{
 })
 
 
-app.post("/game",(req, res) =>{
+app.post("/game",(req, res) =>{ // cadastros de game
         var{ title, price, year} = req.body;
         if( title != null &&  price != null &&  year != null ){
             DB.games.push({ 
@@ -95,7 +95,27 @@ app.post("/game",(req, res) =>{
 
 
 
-})// cadastros de game
+})
+
+app.delete("/game/:id",(req,res) =>{
+    if(isNaN(req.params.id)){
+        res.sendStatus(400) //not validator
+
+    }else{
+        var id  = parseInt(req.params.id)
+        var index = DB.games.findIndex(g => g.id == id)
+        if(index == -1){
+            res.sendStatus(404)
+        }else{
+            DB.games.splice(index, 1)//deletando o game pelo index  
+            res.sendStatus(200)
+        }
+     
+    }
+    
+
+})
+
 app.listen(8080,()=>{
         console.log("API RODANDO!")
 })
