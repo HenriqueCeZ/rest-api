@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser');
+
 
 
 app.use(express.urlencoded({ extended: true }));
@@ -50,7 +50,9 @@ var DB = {
 
 }
 
-app.get("/",()=>{
+app.get("/games",(req, res)=>{
+    res.statusCode = 200 ; // status code 200: requisição feita com sucesso  
+    res.json(DB.games)
     
 
 })
