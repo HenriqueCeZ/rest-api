@@ -76,6 +76,26 @@ app.get("/games/:id",(req, res)=>{
     
 
 })
+
+
+app.post("/game",(req, res) =>{
+        var{ title, price, year} = req.body;
+        if( title != null &&  price != null &&  year != null ){
+            DB.games.push({ 
+                id: 2303,
+                title,
+                price,
+                year
+                
+            })
+            res.sendStatus(200);
+        }else{
+            res.sendStatus(400)
+        }
+
+
+
+})// cadastros de game
 app.listen(8080,()=>{
         console.log("API RODANDO!")
 })
