@@ -50,13 +50,32 @@ var DB = {
 
 }
 
-app.get("/games",(req, res)=>{
+app.get("/games",(req, res)=>{ // endpoint get é responsável por retornar dados
     res.statusCode = 200 ; // status code 200: requisição feita com sucesso  
     res.json(DB.games)
     
 
 })
 
+app.get("/games/:id",(req, res)=>{
+    if(isNaN(req.params.id)){
+        res.sendStatus(400) //not validator
+
+    }else{
+        var id  = parseInt(req.params.id)
+        var game = DB.games.find(g => g.id == id)
+
+        if(game != undefined){
+            res.statusCode = 200 // success
+            res.json(game);
+        }else{
+            res.sendStatus(404) // Not found
+        }
+    }
+    
+    
+
+})
 app.listen(8080,()=>{
         console.log("API RODANDO!")
 })
