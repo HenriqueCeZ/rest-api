@@ -23,6 +23,14 @@
     <input type="number" name="price" id="price" placeholder="preço"><br>
     <button type="button" onclick="createGame()">Adicionar game</button>
     </div>  
+    <h2>Editar game:</h2>
+    <div class ="input">
+    <input type="text" name="idEdit" id="idEdit" placeholder="id" readonly/><br>
+    <input type="text" name="editTitle" id="editTitle" placeholder="Título"><br>
+    <input type="number" name="editYear" id="editYear" placeholder="Ano"><br>
+    <input type="number" name="editPrice" id="editPrice" placeholder="preço"><br>
+    <button type="button" onclick="updateGame()">Editar game</button>
+    </div>
 
 
     
@@ -54,6 +62,47 @@
             console.log("Não aceita input com campo vazio")
         }
     }
+   
+
+
+    function updateGame(){
+            var idInput  = document.getElementById("idEdit")
+            var titleInput = document.getElementById("editTitle")
+            var yearInput = document.getElementById("editYear")
+            var priceInput = document.getElementById("editPrice")
+
+            var game = {
+                title: titleInput.value,
+                year: yearInput.value,
+                price: priceInput.value
+            }
+            var id = idInput.value;
+
+            if(game.title != "" && game.year != "" && game.price != ""){
+            axios.put("http://localhost:8080/game/"+id ,game).then(response =>{
+                if(response.status == 200){
+                    alert("successful registration!")
+                    
+                }
+            }).catch(err =>{
+                (console.log(err))
+            })
+
+        }else{
+            console.log("Não aceita input com campo vazio")
+        }
+
+
+    }
+
+        function deleteGame(listItem){
+            var id   = listItem.getAttribute("data-id")
+            axios.delete("http://localhost:8080/game/"+id).then(response =>{
+                alert("deleted game!")
+            }).catch(err =>{
+                console.log(err);  
+            })
+        }
 
 
         axios.get("http://localhost:8080/games").then(response=>{ //consumindo API
@@ -65,8 +114,24 @@
                     item.setAttribute("data-title",game.title)
                     item.setAttribute("data-year",game.year)
                     item.setAttribute("data-price",game.price)
-
                     item.innerHTML ="Título: " + game.title
+
+                    var deleteBtn =  document.createElement("button");
+                    deleteBtn.innerHTML = "Deletar"
+
+                    var editBtn = document.createElement("button");
+                    editBtn.innerHTML = "Editar"
+                    editBtn.addEventListener("click",function(){
+                        loadForm(item)
+                    })
+
+                    item.appendChild(deleteBtn);
+                    item.appendChild(editBtn);
+                    deleteBtn.addEventListener("click",function(){
+                        deleteGame(item)
+                    })
+
+                    
                     list.appendChild(item)
                 })
                 
@@ -75,7 +140,19 @@
         });
 
         
+        function loadForm(listItem){
+            
+            var id = listItem.getAttribute("data-id")
+            var title = listItem.getAttribute("data-title")
+            var year = listItem.getAttribute("data-year")
+            var price = listItem.getAttribute("data-price")
+            document.getElementById("idEdit").value = id
+            document.getElementById("editTitle").value = title
+            document.getElementById("editYear").value = year
+            document.getElementById("editPrice").value = price
+            
 
+}               
 
     </script>
 
