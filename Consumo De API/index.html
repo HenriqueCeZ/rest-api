@@ -4,24 +4,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles.css">
     <title>API games</title>
 </head>
 <body>
     <hr>
 
-    <h2>Lista de games</h2>
+    <h2>Lista de games:</h2>
 
     <ul id="games"></ul>
 
     <hr>
 
-    <h2>Novo game</h2>
-
+    <h2>Novo game:</h2>
+    <div class ="input">
     <input type="text" name="title" id="title" placeholder="Título"><br>
     <input type="number" name="year" id="year" placeholder="Ano"><br>
     <input type="number" name="price" id="price" placeholder="preço"><br>
     <button type="button" onclick="createGame()">Adicionar game</button>
-
+    </div>  
 
 
     
@@ -38,6 +39,8 @@
                 year: yearInput.value,
                 price: priceInput.value
             }
+
+            if(game.title != "" && game.year != "" && game.price != ""){
             axios.post("http://localhost:8080/game",game).then(response =>{
                 if(response.status == 200){
                     alert("successful registration!")
@@ -47,7 +50,10 @@
                 (console.log(err))
             })
 
+        }else{
+            console.log("Não aceita input com campo vazio")
         }
+    }
 
 
         axios.get("http://localhost:8080/games").then(response=>{ //consumindo API
@@ -55,6 +61,11 @@
                 var list = document.getElementById("games")
                 games.forEach(game =>{
                     var item = document.createElement("li")
+                    item.setAttribute("data-id",game.id)
+                    item.setAttribute("data-title",game.title)
+                    item.setAttribute("data-year",game.year)
+                    item.setAttribute("data-price",game.price)
+
                     item.innerHTML ="Título: " + game.title
                     list.appendChild(item)
                 })
